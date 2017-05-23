@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -23,10 +25,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        readSMS(getApplicationContext());
+        final ListView smsList = (ListView)findViewById(R.id.sms_list);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.sms_list_layout, readSMS(getApplicationContext()));
+        smsList.setAdapter(adapter);
     }
 
-    private void readSMS(Context context)
+    private List<String>  readSMS(Context context)
     {
         ContentResolver cr = context.getContentResolver();
 
@@ -59,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "No message to show!", Toast.LENGTH_SHORT).show();
             }
             c.close();
+            return lstSms;
         }
+        return null;
     }
 }
